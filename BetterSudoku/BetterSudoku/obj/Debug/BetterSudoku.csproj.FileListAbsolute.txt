@@ -1,0 +1,10 @@
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\bin\Debug\BetterSudoku.exe.config
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\bin\Debug\BetterSudoku.exe
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\bin\Debug\BetterSudoku.pdb
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.csprojAssemblyReference.cache
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.Form1.resources
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.Properties.Resources.resources
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.csproj.GenerateResource.cache
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.csproj.CoreCompileInputs.cache
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.exe
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.pdb
