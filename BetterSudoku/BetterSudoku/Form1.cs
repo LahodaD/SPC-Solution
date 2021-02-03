@@ -163,19 +163,23 @@ namespace BetterSudoku
         private void loadGame_Click(object sender, EventArgs e)
         {
             //TODO: dodelat osetreni
-            openFileDialog1.ShowDialog();
-            string fileName = openFileDialog1.FileName;
-            string s;
-            int row = 0;
-            using (StreamReader sr = new StreamReader(fileName))
+            openFileDialog1.InitialDirectory = "c:\\";
+            openFileDialog1.Filter = "(*.txt)|*.txt";
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                while ((s = sr.ReadLine()) != null)
+                string fileName = openFileDialog1.FileName;
+                string s;
+                int row = 0;
+                using (StreamReader sr = new StreamReader(fileName))
                 {
-                    for (int i = 0; i < 9; i++)
+                    while ((s = sr.ReadLine()) != null)
                     {
-                        cells[i, row].setText(s[i] - '0');
+                        for (int i = 0; i < 9; i++)
+                        {
+                            cells[i, row].setText(s[i] - '0');
+                        }
+                        row++;
                     }
-                    row++;
                 }
             }
         }
