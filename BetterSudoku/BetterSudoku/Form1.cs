@@ -96,7 +96,7 @@ namespace BetterSudoku
             return true;
         }
 
-        private bool solve()
+        private bool solve()//TODO:vylepsit
         {
             int row = 0;
             int col = 0;
@@ -129,8 +129,6 @@ namespace BetterSudoku
                 if (checkValidValue(row, col, num))
                 {
                     cells[row, col].setText(num);
-                    //cells[row, col].Text = num.ToString();
-                    //cells[row, col].Value = num;
                     if (solve())
                     {
                         return true;
@@ -146,15 +144,43 @@ namespace BetterSudoku
 
         private void manualEntry_Click(object sender, EventArgs e)
         {
-            foreach (SudokuCells cell in cells)
+            clearBoard();
+
+            for (int i = 0; i < 9; i++)
             {
-                cell.KeyPress += pressCell;
+                for (int j = 0; j < 9; j++)
+                {
+                    cells[i, j].KeyPress += pressCell;
+                }
             }
         }
 
+
         private void sloveBtn_Click(object sender, EventArgs e)
         {
-            if (!solve())
+            bool wrongValue = false;
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (!checkValidValue(i, j, cells[i, j].Value) && cells[i, j].Value != 0)
+                    {
+                        cells[i, j].BackColor = Color.Red;
+                        wrongValue = true;
+                    }
+                    else //nastavi backcolor zase na bilou pokud uz je to opravene
+                    {
+                        cells[i, j].BackColor = Color.White;
+                    }
+                }
+            }
+            if (wrongValue)
+            {
+                MessageBox.Show("chyba v zadani, prosim upravte");
+                return;
+            }
+
+            if (!solve())//TODO: nefunguje tak jak ma
             {
                 MessageBox.Show("nelze vyřešit");
             }
@@ -162,9 +188,11 @@ namespace BetterSudoku
 
         private void loadGame_Click(object sender, EventArgs e)
         {
-            //TODO: dodelat osetreni
+            clearBoard();
+
             openFileDialog1.InitialDirectory = "c:\\";
             openFileDialog1.Filter = "(*.txt)|*.txt";
+
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 string fileName = openFileDialog1.FileName;
@@ -174,9 +202,26 @@ namespace BetterSudoku
                 {
                     while ((s = sr.ReadLine()) != null)
                     {
+                        //kontorola radku a sloupcu
+                        if (s.Length > 9 || row > 9)
+                        {
+                            MessageBox.Show("soubor byl poškozen špatný počet řádků nebo sloupců");
+                            return;
+                        }
+
                         for (int i = 0; i < 9; i++)
                         {
+                            if ((s[i]-'0') < 0 || (s[i] - '0') > 9) //kontrola pozadovanych hodnot
+                            {
+                                MessageBox.Show("soubor byl poškozen špatná hodnota");
+                                return;
+                            }
+
                             cells[i, row].setText(s[i] - '0');
+                            if (cells[i,row].Value != 0)
+                            {
+                                cells[i, row].IsLocked = true;
+                            }
                         }
                         row++;
                     }
@@ -186,7 +231,34 @@ namespace BetterSudoku
 
         private void saveGame_Click(object sender, EventArgs e)
         {
+            string fileName = string.Empty;
+            saveFileDialog1.InitialDirectory = "c:\\";
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt";
             
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                fileName = saveFileDialog1.FileName;
+                using (StreamWriter sw = new StreamWriter(fileName))
+                {
+                    for (int i = 0; i < 9; i++)
+                    {
+                        for (int j = 0; j < 9; j++)
+                        {
+                            sw.Write(cells[j, i].Value);
+                        }
+                        sw.WriteLine();
+                    }
+                    sw.Flush();
+                }
+            }
+        }
+
+        private void clearBoard()
+        {
+            foreach (SudokuCells cell in cells)
+            {
+                cell.clear();
+            }
         }
     }
 }
