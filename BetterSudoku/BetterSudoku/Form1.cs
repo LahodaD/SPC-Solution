@@ -31,14 +31,17 @@ namespace BetterSudoku
                     cells[i, j].FlatStyle = FlatStyle.Flat;
                     cells[i, j].FlatAppearance.BorderColor = Color.Black;
 
-                    //cells[i, j].KeyPress += pressCell;
+                    if (((i / 3) + (j / 3)) % 2 == 0)
+                    {
+                        cells[i, j].BackColor = Color.LightGray;
+                    }
 
                     panel1.Controls.Add(cells[i, j]);
                 }
             }
         }
 
-        private void pressCell(Object sender, KeyPressEventArgs e)
+        private void PressCell(Object sender, KeyPressEventArgs e)
         {
             SudokuCells cell = (SudokuCells)sender;
             int cellValue;
@@ -52,11 +55,11 @@ namespace BetterSudoku
             {
                 if (cellValue == 0)
                 {
-                    cell.clear();
+                    cell.Clear();
                 }
                 else
                 {
-                    cell.setText(cellValue);
+                    cell.SetText(cellValue);
                 }
                 cell.ForeColor = SystemColors.ControlDark;
             }
@@ -66,7 +69,7 @@ namespace BetterSudoku
             createGameFild();
         }
 
-        private bool checkValidValue(int xCoordinate, int yCoordinate, int value)
+        private bool CheckValidValue(int xCoordinate, int yCoordinate, int value)
         {
             for (int i = 0; i < 9; i++)
             {
@@ -95,8 +98,62 @@ namespace BetterSudoku
             }
             return true;
         }
+        private void OptionsAdd()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (cells[j,i].Value == 0)
+                    {
+                        cells[j, i].DefoultPoss();
+                        for (int num = 1; num <= 9; num++)
+                        {
+                            if (CheckValidValue(j,i,num))
+                            {
+                                cells[j, i].SetPossibilities(num);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
-        private bool solve()//TODO:vylepsit
+        private int ValueAdd()
+        {
+            int isMoreCandidates = 0;
+            foreach (SudokuCells cell in cells)
+            {
+                if (cell.GetPossibilities().Count == 1 && cell.Value == 0)
+                {
+                    cell.SetText(cell.GetPossibilities()[0]);
+                }
+
+                if(cell.GetPossibilities().Count != 1 && cell.Value == 0)
+                {
+                    isMoreCandidates++;
+                }
+            }
+            return isMoreCandidates;
+        }
+
+        private bool LogicSolve()
+        {
+            int counter = 0;
+            do
+            {
+                int pomCounter = counter;
+                OptionsAdd();
+                counter = ValueAdd();
+                if (pomCounter == counter)
+                {
+                    return false;
+                }
+            } while (counter != 0);
+            return true;
+        }
+
+        private bool Solve()//TODO:vylepsit
         {
             int row = 0;
             int col = 0;
@@ -126,10 +183,10 @@ namespace BetterSudoku
 
             for (int num = 1; num <= 9; num++)
             {
-                if (checkValidValue(row, col, num))
+                if (CheckValidValue(row, col, num))
                 {
-                    cells[row, col].setText(num);
-                    if (solve())
+                    cells[row, col].SetText(num);
+                    if (Solve())
                     {
                         return true;
                     }
@@ -142,35 +199,36 @@ namespace BetterSudoku
             return false;
         }
 
-        private void manualEntry_Click(object sender, EventArgs e)
+        private void ManualEntry_Click(object sender, EventArgs e)
         {
-            clearBoard();
+            ClearBoard();
 
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    cells[i, j].KeyPress += pressCell;
+                    cells[i, j].KeyPress += PressCell;
                 }
             }
         }
 
 
-        private void sloveBtn_Click(object sender, EventArgs e)
+        private void SolveBtn_Click(object sender, EventArgs e)
         {
             bool wrongValue = false;
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    if (!checkValidValue(i, j, cells[i, j].Value) && cells[i, j].Value != 0)
+                    if (!CheckValidValue(i, j, cells[i, j].Value) && cells[i, j].Value != 0)
                     {
                         cells[i, j].BackColor = Color.Red;
                         wrongValue = true;
                     }
-                    else //nastavi backcolor zase na bilou pokud uz je to opravene
+                    else if (cells[i,j].Value != 0)//nastavi backcolor zase na modrou pokud uz je to opravene
                     {
-                        cells[i, j].BackColor = Color.White;
+                        //nastavi se zadané hodnoty na modrou
+                        cells[i, j].BackColor = Color.LightBlue;
                     }
                 }
             }
@@ -180,15 +238,15 @@ namespace BetterSudoku
                 return;
             }
 
-            if (!solve())//TODO: nefunguje tak jak ma
+            if (!LogicSolve())
             {
-                MessageBox.Show("nelze vyřešit");
+                Solve();
             }
         }
 
-        private void loadGame_Click(object sender, EventArgs e)
+        private void LoadGame_Click(object sender, EventArgs e)
         {
-            clearBoard();
+            ClearBoard();
 
             openFileDialog1.InitialDirectory = "c:\\";
             openFileDialog1.Filter = "(*.txt)|*.txt";
@@ -217,7 +275,7 @@ namespace BetterSudoku
                                 return;
                             }
 
-                            cells[i, row].setText(s[i] - '0');
+                            cells[i, row].SetText(s[i] - '0');
                             if (cells[i,row].Value != 0)
                             {
                                 cells[i, row].IsLocked = true;
@@ -229,7 +287,7 @@ namespace BetterSudoku
             }
         }
 
-        private void saveGame_Click(object sender, EventArgs e)
+        private void SaveGame_Click(object sender, EventArgs e)
         {
             string fileName = string.Empty;
             saveFileDialog1.InitialDirectory = "c:\\";
@@ -253,11 +311,22 @@ namespace BetterSudoku
             }
         }
 
-        private void clearBoard()
+        private void ClearBoard()
         {
-            foreach (SudokuCells cell in cells)
+            for (int i = 0; i < 9; i++)
             {
-                cell.clear();
+                for (int j = 0; j < 9; j++)
+                {
+                    cells[i,j].Clear();
+                    if (((i / 3) + (j / 3)) % 2 == 0)
+                    {
+                        cells[i, j].BackColor = Color.LightGray;
+                    }
+                    else
+                    {
+                        cells[i, j].BackColor = Color.White;
+                    }
+                }
             }
         }
     }

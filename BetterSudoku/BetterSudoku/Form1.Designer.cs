@@ -53,7 +53,7 @@
             this.manualEntry.TabIndex = 1;
             this.manualEntry.Text = "Ruční zadání";
             this.manualEntry.UseVisualStyleBackColor = true;
-            this.manualEntry.Click += new System.EventHandler(this.manualEntry_Click);
+            this.manualEntry.Click += new System.EventHandler(this.ManualEntry_Click);
             // 
             // sloveBtn
             // 
@@ -63,7 +63,7 @@
             this.sloveBtn.TabIndex = 2;
             this.sloveBtn.Text = "Vyřešit";
             this.sloveBtn.UseVisualStyleBackColor = true;
-            this.sloveBtn.Click += new System.EventHandler(this.sloveBtn_Click);
+            this.sloveBtn.Click += new System.EventHandler(this.SolveBtn_Click);
             // 
             // loadGame
             // 
@@ -73,7 +73,7 @@
             this.loadGame.TabIndex = 3;
             this.loadGame.Text = "Načíst hru";
             this.loadGame.UseVisualStyleBackColor = true;
-            this.loadGame.Click += new System.EventHandler(this.loadGame_Click);
+            this.loadGame.Click += new System.EventHandler(this.LoadGame_Click);
             // 
             // openFileDialog1
             // 
@@ -87,7 +87,7 @@
             this.saveGame.TabIndex = 4;
             this.saveGame.Text = "Uložit";
             this.saveGame.UseVisualStyleBackColor = true;
-            this.saveGame.Click += new System.EventHandler(this.saveGame_Click);
+            this.saveGame.Click += new System.EventHandler(this.SaveGame_Click);
             // 
             // Form1
             // 
