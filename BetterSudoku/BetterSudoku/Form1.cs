@@ -104,14 +104,14 @@ namespace BetterSudoku
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    if (cells[j,i].Value == 0)
+                    if (cells[i,j].Value == 0)
                     {
-                        cells[j, i].DefoultPoss();
+                        cells[i, j].DefoultPoss();
                         for (int num = 1; num <= 9; num++)
                         {
-                            if (CheckValidValue(j,i,num))
+                            if (CheckValidValue(i,j,num))
                             {
-                                cells[j, i].SetPossibilities(num);
+                                cells[i, j].SetPossibilities(num);
                             }
                         }
                     }
@@ -153,7 +153,7 @@ namespace BetterSudoku
             return true;
         }
 
-        private bool Solve()//TODO:vylepsit
+        private bool Solve()
         {
             int row = 0;
             int col = 0;
@@ -180,12 +180,13 @@ namespace BetterSudoku
             {
                 return true;
             }
-
-            for (int num = 1; num <= 9; num++)
+            
+            for (int num = 0; num < cells[row,col].GetPossibilities().Count; num++)
             {
-                if (CheckValidValue(row, col, num))
+                int pom = cells[row, col].GetPossibilities()[num];
+                if (CheckValidValue(row, col, pom))
                 {
-                    cells[row, col].SetText(num);
+                    cells[row, col].SetText(pom);
                     if (Solve())
                     {
                         return true;
@@ -222,13 +223,13 @@ namespace BetterSudoku
                 {
                     if (!CheckValidValue(i, j, cells[i, j].Value) && cells[i, j].Value != 0)
                     {
-                        cells[i, j].BackColor = Color.Red;
+                        cells[i, j].ForeColor = Color.Red;
                         wrongValue = true;
                     }
                     else if (cells[i,j].Value != 0)//nastavi backcolor zase na modrou pokud uz je to opravene
                     {
                         //nastavi se zadané hodnoty na modrou
-                        cells[i, j].BackColor = Color.LightBlue;
+                        cells[i, j].ForeColor = SystemColors.ControlDark;
                     }
                 }
             }
@@ -279,6 +280,7 @@ namespace BetterSudoku
                             if (cells[i,row].Value != 0)
                             {
                                 cells[i, row].IsLocked = true;
+                                cells[i, row].ForeColor = SystemColors.ControlDark;
                             }
                         }
                         row++;
@@ -289,13 +291,12 @@ namespace BetterSudoku
 
         private void SaveGame_Click(object sender, EventArgs e)
         {
-            string fileName = string.Empty;
             saveFileDialog1.InitialDirectory = "c:\\";
             saveFileDialog1.Filter = "txt files (*.txt)|*.txt";
             
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                fileName = saveFileDialog1.FileName;
+                string fileName = saveFileDialog1.FileName;
                 using (StreamWriter sw = new StreamWriter(fileName))
                 {
                     for (int i = 0; i < 9; i++)
