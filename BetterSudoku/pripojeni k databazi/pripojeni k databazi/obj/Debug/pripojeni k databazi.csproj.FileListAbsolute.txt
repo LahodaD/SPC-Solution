@@ -1,0 +1,7 @@
+C:\Users\DELL\Documents\SPC-Solution\pripojeni k databazi\pripojeni k databazi\bin\Debug\pripojeni k databazi.exe.config
+C:\Users\DELL\Documents\SPC-Solution\pripojeni k databazi\pripojeni k databazi\bin\Debug\pripojeni k databazi.exe
+C:\Users\DELL\Documents\SPC-Solution\pripojeni k databazi\pripojeni k databazi\bin\Debug\pripojeni k databazi.pdb
+C:\Users\DELL\Documents\SPC-Solution\pripojeni k databazi\pripojeni k databazi\obj\Debug\pripojeni k databazi.csprojAssemblyReference.cache
+C:\Users\DELL\Documents\SPC-Solution\pripojeni k databazi\pripojeni k databazi\obj\Debug\pripojeni k databazi.csproj.CoreCompileInputs.cache
+C:\Users\DELL\Documents\SPC-Solution\pripojeni k databazi\pripojeni k databazi\obj\Debug\pripojeni k databazi.exe
+C:\Users\DELL\Documents\SPC-Solution\pripojeni k databazi\pripojeni k databazi\obj\Debug\pripojeni k databazi.pdb

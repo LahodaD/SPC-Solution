@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -239,17 +240,48 @@ namespace BetterSudoku
                 return;
             }
 
+            string[] zadani = new string[81];
+            int a = 0;
+            foreach (SudokuCells cell in cells)
+            {
+                zadani[a] = cell.Value.ToString();
+                a++;
+            }
+
+            string zadaniPom = string.Join("", zadani);
+            
+            double stopky;
+            
+            Database databse = new Database();
+            
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             if (!LogicSolve())
             {
                 Solve();
             }
+            stopwatch.Stop();
+
+            string[] reseni = new string[81];
+            int b = 0;
+            foreach (SudokuCells cell in cells)
+            {
+                reseni[b] = cell.Value.ToString();
+                b++;
+            }
+
+            string reseniPom = string.Join("", reseni);
+
+            TimeSpan stopwatchElapsed = stopwatch.Elapsed;
+            stopky = Convert.ToDouble(stopwatchElapsed.TotalSeconds);
+
+            databse.Insert(zadaniPom, reseniPom, DateTime.Now, stopky);
         }
 
         private void LoadGame_Click(object sender, EventArgs e)
         {
             ClearBoard();
 
-            openFileDialog1.InitialDirectory = "c:\\";
             openFileDialog1.Filter = "(*.txt)|*.txt";
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
@@ -291,7 +323,6 @@ namespace BetterSudoku
 
         private void SaveGame_Click(object sender, EventArgs e)
         {
-            saveFileDialog1.InitialDirectory = "c:\\";
             saveFileDialog1.Filter = "txt files (*.txt)|*.txt";
             
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
@@ -311,6 +342,8 @@ namespace BetterSudoku
                 }
             }
         }
+        //TODO:kontrola za chodu zadavani
+        //TODO:
 
         private void ClearBoard()
         {
