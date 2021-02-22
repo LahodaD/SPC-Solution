@@ -8,3 +8,6 @@ C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterS
 C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.csproj.CoreCompileInputs.cache
 C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.exe
 C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.pdb
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\bin\Debug\Sudoku.mdf
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\bin\Debug\Sudoku_log.ldf
+C:\Users\DELL\Documents\SPC-Solution\BetterSudoku\BetterSudoku\obj\Debug\BetterSudoku.History.resources

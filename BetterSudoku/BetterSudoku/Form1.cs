@@ -20,6 +20,7 @@ namespace BetterSudoku
         }
 
         SudokuCells[,] cells = new SudokuCells[9, 9];
+        
         private void createGameFild()
         {
             for (int i = 0; i < 9; i++)
@@ -68,138 +69,30 @@ namespace BetterSudoku
         private void Form1_Load(object sender, EventArgs e)
         {
             createGameFild();
+            
         }
 
-        private bool CheckValidValue(int xCoordinate, int yCoordinate, int value)
+        public void LoadFromHisotry(History history)
         {
-            for (int i = 0; i < 9; i++)
+            
+
+            Database database = new Database();
+            if (history.MyProperty == null)
             {
-                if (cells[xCoordinate, i].Value == value && i != yCoordinate)
-                {
-                    return false;
-                }
-                if (cells[i, yCoordinate].Value == value && i != xCoordinate)
-                {
-                    return false;
-                }
+                return;
             }
 
-            int tmpI = xCoordinate - (xCoordinate % 3);
-            int tmpJ = yCoordinate - (yCoordinate % 3);
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    if (cells[tmpI + i, tmpJ + j].Value == value && tmpI + i != xCoordinate && tmpJ + j != yCoordinate)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        private void OptionsAdd()
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    if (cells[i,j].Value == 0)
-                    {
-                        cells[i, j].DefoultPoss();
-                        for (int num = 1; num <= 9; num++)
-                        {
-                            if (CheckValidValue(i,j,num))
-                            {
-                                cells[i, j].SetPossibilities(num);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private int ValueAdd()
-        {
-            int isMoreCandidates = 0;
+            string pom = database.Select(history.MyProperty, "Zadani").ToString();
+            
+            int i = 0;
             foreach (SudokuCells cell in cells)
             {
-                if (cell.GetPossibilities().Count == 1 && cell.Value == 0)
-                {
-                    cell.SetText(cell.GetPossibilities()[0]);
-                }
-
-                if(cell.GetPossibilities().Count != 1 && cell.Value == 0)
-                {
-                    isMoreCandidates++;
-                }
+                cell.SetText(pom[i] - '0');
+                i++;
             }
-            return isMoreCandidates;
         }
 
-        private bool LogicSolve()
-        {
-            int counter = 0;
-            do
-            {
-                int pomCounter = counter;
-                OptionsAdd();
-                counter = ValueAdd();
-                if (pomCounter == counter)
-                {
-                    return false;
-                }
-            } while (counter != 0);
-            return true;
-        }
 
-        private bool Solve()
-        {
-            int row = 0;
-            int col = 0;
-            bool isEmpty = true;
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    if (cells[i, j].Value == 0)
-                    {
-                        row = i;
-                        col = j;
-                        isEmpty = false;
-                        break;
-                    }
-                }
-                if (!isEmpty)
-                {
-                    break;
-                }
-            }
-
-            if (isEmpty)
-            {
-                return true;
-            }
-            
-            for (int num = 0; num < cells[row,col].GetPossibilities().Count; num++)
-            {
-                int pom = cells[row, col].GetPossibilities()[num];
-                if (CheckValidValue(row, col, pom))
-                {
-                    cells[row, col].SetText(pom);
-                    if (Solve())
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        cells[row, col].Value = 0;
-                    }
-                }
-            }
-            return false;
-        }
 
         private void ManualEntry_Click(object sender, EventArgs e)
         {
@@ -217,12 +110,14 @@ namespace BetterSudoku
 
         private void SolveBtn_Click(object sender, EventArgs e)
         {
+            Solver solver = new Solver(cells);
+
             bool wrongValue = false;
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    if (!CheckValidValue(i, j, cells[i, j].Value) && cells[i, j].Value != 0)
+                    if (!solver.CheckValidValue(i, j, cells[i, j].Value) && cells[i, j].Value != 0)
                     {
                         cells[i, j].ForeColor = Color.Red;
                         wrongValue = true;
@@ -254,11 +149,12 @@ namespace BetterSudoku
             
             Database databse = new Database();
             
+            
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            if (!LogicSolve())
+            if (!solver.LogicSolve())
             {
-                Solve();
+                solver.Solve();
             }
             stopwatch.Stop();
 
@@ -342,9 +238,7 @@ namespace BetterSudoku
                 }
             }
         }
-        //TODO:kontrola za chodu zadavani
-        //TODO:
-
+        
         private void ClearBoard()
         {
             for (int i = 0; i < 9; i++)
@@ -363,5 +257,15 @@ namespace BetterSudoku
                 }
             }
         }
+
+        private void btnHistory_Click(object sender, EventArgs e)
+        {
+            ClearBoard();
+            History history = new History();
+            history.ShowDialog();
+            LoadFromHisotry(history);
+        }
+
+
     }
 }

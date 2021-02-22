@@ -10,8 +10,8 @@ namespace BetterSudoku
 {
     class Database
     {
-        private const string connectionString = @"Data Source=databaze.fai.utb.cz;
-                                                        Initial Catalog=A20500_AP1DS;User ID=A20500;Password=ahoj1234";
+        private const string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;
+                                                        Initial Catalog=Sudoku;Integrated Security=True";
         //TODO:predelat
         public void Connection()
         {
@@ -24,29 +24,91 @@ namespace BetterSudoku
 
         public void Insert(string zadani, string reseni, DateTime datumHry, double stopky)
         {
-            
-            //SqlConnection connection = new SqlConnection();
-
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-                //MessageBox.Show("Připojení otevřeno");
-
-                string dotaz = "INSERT INTO Sudoku (Zadani,Reseni,DatumHry,Stopky) VALUES (@Zadani, @Reseni, @DatumHry, @Stopky)"; //TODO: dodelat dotaz a vytvorit databazi
-                SqlCommand insert = new SqlCommand(dotaz, connection);
-                insert.Parameters.AddWithValue("@Zadani", zadani);
-                insert.Parameters.AddWithValue("@Reseni", reseni);
-                insert.Parameters.AddWithValue("@DatumHry", datumHry);
-                insert.Parameters.AddWithValue("@Stopky", stopky);
-
-                int affectedRows = insert.ExecuteNonQuery();
-                if (affectedRows < 1)
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    MessageBox.Show("nepovedlo se uložit záznamy do databáze");
-                    return;
+
+                    connection.Open();
+                    //MessageBox.Show("Připojení otevřeno");
+
+                    string dotaz = "INSERT INTO Sudokutable (Zadani,Reseni,DatumHry,Stopky) VALUES (@Zadani, @Reseni, @DatumHry, @Stopky)"; //TODO: dodelat dotaz a vytvorit databazi
+                    SqlCommand insert = new SqlCommand(dotaz, connection);
+                    insert.Parameters.AddWithValue("@Zadani", zadani);
+                    insert.Parameters.AddWithValue("@Reseni", reseni);
+                    insert.Parameters.AddWithValue("@DatumHry", datumHry);
+                    insert.Parameters.AddWithValue("@Stopky", stopky);
+
+                    int affectedRows = insert.ExecuteNonQuery();
+                    if (affectedRows < 1)
+                    {
+                        MessageBox.Show("nepovedlo se uložit záznamy do databáze");
+                        connection.Close();
+                        return;
+                    }
+                    connection.Close();
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + " nepodařilo se uložit do databáze");
+                
+                return;
+            }
+
         }
+
+
+        public string Select(string hledaneSlovo, string sloupec)
+        {
+            string nalezeno = "";
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    
+                    connection.Open();
+                    
+                    string dotaz = "SELECT Zadani, Reseni, DatumHry, Stopky FROM Sudokutable WHERE Id=@hledaneSlovo";
+                    SqlCommand select = new SqlCommand(dotaz, connection);
+                    select.Parameters.AddWithValue("@hledaneSlovo", hledaneSlovo);
+                    
+
+                    SqlDataReader dataReader = select.ExecuteReader();
+                    while (dataReader.Read())
+                    {
+                        if (sloupec == "DatumHry")
+                        {
+                            nalezeno = dataReader[2].ToString();
+                        }
+                        else if (sloupec == "Stopky")
+                        {
+                            nalezeno = dataReader[3].ToString();
+                        }
+                        else if (sloupec == "Zadani")
+                        {
+                            nalezeno = dataReader[0].ToString();
+                        }
+                        else if (sloupec == "Reseni")
+                        {
+                            nalezeno = dataReader[1].ToString();
+                        }
+                        
+                    }
+
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + " nepodařilo se nacist z databáze");
+                return "";
+            }
+
+
+            return nalezeno;
+        }
+
     }
 }

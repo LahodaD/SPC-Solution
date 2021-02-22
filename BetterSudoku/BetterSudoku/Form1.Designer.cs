@@ -35,6 +35,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveGame = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.btnHistory = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -89,11 +90,22 @@
             this.saveGame.UseVisualStyleBackColor = true;
             this.saveGame.Click += new System.EventHandler(this.SaveGame_Click);
             // 
+            // btnHistory
+            // 
+            this.btnHistory.Location = new System.Drawing.Point(592, 248);
+            this.btnHistory.Name = "btnHistory";
+            this.btnHistory.Size = new System.Drawing.Size(170, 40);
+            this.btnHistory.TabIndex = 5;
+            this.btnHistory.Text = "Historie her";
+            this.btnHistory.UseVisualStyleBackColor = true;
+            this.btnHistory.Click += new System.EventHandler(this.btnHistory_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 544);
+            this.Controls.Add(this.btnHistory);
             this.Controls.Add(this.saveGame);
             this.Controls.Add(this.loadGame);
             this.Controls.Add(this.sloveBtn);
@@ -115,6 +127,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button saveGame;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button btnHistory;
     }
 }
 
