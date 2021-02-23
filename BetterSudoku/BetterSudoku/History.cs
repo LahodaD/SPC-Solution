@@ -13,7 +13,7 @@ namespace BetterSudoku
 {
     public partial class History : Form
     {
-        public string MyProperty { get; set; }
+        public string EnteringGame { get; set; }
         public History()
         {
             InitializeComponent();
@@ -47,31 +47,37 @@ namespace BetterSudoku
 
         private void History_Load(object sender, EventArgs e)
         {
-            createGameFild();
-            
+            createGameFild();        
         }
 
         private void AddDataToListbox()
         {
             string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;
                                                         Initial Catalog=Sudoku;Integrated Security=True";
-
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
 
-                connection.Open();
-                
-                string dotaz = "SELECT * FROM Sudokutable";
-                SqlCommand select = new SqlCommand(dotaz, connection);
-
-                SqlDataReader dataReader = select.ExecuteReader();
-                while (dataReader.Read())
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    listBox1.Items.Add(dataReader[0].ToString());
-                }
 
-                connection.Close();
+                    connection.Open();
+                
+                    string dotaz = "SELECT * FROM Sudokutable";
+                    SqlCommand select = new SqlCommand(dotaz, connection);
+
+                    SqlDataReader dataReader = select.ExecuteReader();
+                    while (dataReader.Read())
+                    {
+                        listBox1.Items.Add(dataReader[0].ToString());
+                    }
+
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
             }
         }
 
@@ -102,13 +108,13 @@ namespace BetterSudoku
             {
                 return;
             }
-            string vybrana = (string)listBox1.SelectedItem;
+            string choose = (string)listBox1.SelectedItem;
             Database database = new Database();
             int i = 0;
             foreach (SudokuCells cell in cells)
             {
                 cell.Clear();
-                cell.SetText(database.Select(vybrana, "Reseni")[i] - '0');
+                cell.SetText(database.Select(choose, "Reseni")[i] - '0');
                 i++;
             }
         }
@@ -119,13 +125,13 @@ namespace BetterSudoku
             {
                 return;
             }
-            string vybrana = (string)listBox1.SelectedItem;
+            string choose = (string)listBox1.SelectedItem;
             Database database = new Database();
             int i = 0;
             foreach (SudokuCells cell in cells)
             {
                 cell.Clear();
-                cell.SetText(database.Select(vybrana, "Zadani")[i] - '0');
+                cell.SetText(database.Select(choose, "Zadani")[i] - '0');
                 i++;
             }
         }
@@ -133,7 +139,7 @@ namespace BetterSudoku
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MyProperty = (string)listBox1.SelectedItem;
+            EnteringGame = (string)listBox1.SelectedItem;
 
             Close();
         }

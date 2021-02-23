@@ -74,15 +74,15 @@ namespace BetterSudoku
 
         public void LoadFromHisotry(History history)
         {
-            
+            ClearBoard();
 
             Database database = new Database();
-            if (history.MyProperty == null)
+            if (history.EnteringGame == null)
             {
                 return;
             }
 
-            string pom = database.Select(history.MyProperty, "Zadani").ToString();
+            string pom = database.Select(history.EnteringGame, "Zadani").ToString();
             
             int i = 0;
             foreach (SudokuCells cell in cells)
@@ -259,8 +259,7 @@ namespace BetterSudoku
         }
 
         private void btnHistory_Click(object sender, EventArgs e)
-        {
-            ClearBoard();
+        {         
             History history = new History();
             history.ShowDialog();
             LoadFromHisotry(history);
