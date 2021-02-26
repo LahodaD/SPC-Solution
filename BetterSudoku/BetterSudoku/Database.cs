@@ -13,14 +13,14 @@ namespace BetterSudoku
         private const string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;
                                                         Initial Catalog=Sudoku;Integrated Security=True";
         //TODO:predelat
-        public void Connection()
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                MessageBox.Show("Připojení otevřeno");
-            }
-        }
+        //public void Connection()
+        //{
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        connection.Open();
+        //        MessageBox.Show("Připojení otevřeno");
+        //    }
+        //}
 
         public void Insert(string zadani, string reseni, DateTime datumHry, double stopky)
         {
@@ -61,7 +61,7 @@ namespace BetterSudoku
 
         public string Select(string hledaneSlovo, string sloupec)
         {
-            string nalezeno = "";
+            string found = "";
 
             try
             {
@@ -80,19 +80,19 @@ namespace BetterSudoku
                     {
                         if (sloupec == "DatumHry")
                         {
-                            nalezeno = dataReader[2].ToString();
+                            found = dataReader[2].ToString();
                         }
                         else if (sloupec == "Stopky")
                         {
-                            nalezeno = dataReader[3].ToString();
+                            found = dataReader[3].ToString();
                         }
                         else if (sloupec == "Zadani")
                         {
-                            nalezeno = dataReader[0].ToString();
+                            found = dataReader[0].ToString();
                         }
                         else if (sloupec == "Reseni")
                         {
-                            nalezeno = dataReader[1].ToString();
+                            found = dataReader[1].ToString();
                         }
                         
                     }
@@ -107,7 +107,7 @@ namespace BetterSudoku
             }
 
 
-            return nalezeno;
+            return found;
         }
 
     }
